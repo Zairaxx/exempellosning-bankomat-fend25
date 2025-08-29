@@ -1,23 +1,51 @@
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import './App.css'
 
 function App() {
 
-  let fetchData = async () => {
-      let response = await fetch("https://jsonplaceholder.typicode.com/todos/1");
-      let json = await response.json();
-      console.log(json);
+const [data, setData] = useState(null);
+const [errorMsg, setErrorMsg] = useState(null);
+const [loading, setLoading] = useState(false);
+
+const fetchData = async () => {
+    try {
+
+      setLoading(true);
+      setErrorMsg(null);
+
+      const res = await fetch("https://jsonplaceholder.typicode.com/todos");
+      const json = await res.json();
+
+      setData(json)
+      setLoading(false)
+    } catch {
+      setErrorMsg("Failed to fetch");
+      setLoading(false)
+    }
   }
 
-  useEffect(() => {
-    fetchData();
-  },[])
+useEffect(() => {
+  
+  fetchData();
+}, []);
 
-  return (
-    <>
-    <h1>API</h1>
-    </>
-  )
+  // if(loading){
+  //   return <h2>Loading data.. Please wait a moment</h2>
+  // }
+  // if(errorMsg){
+  //   return <h2 style={{color:"red"}}>{errorMsg}</h2>
+  // }
+  // if(data){
+  //   return <h1>Todo-applikation</h1>
+  // }
+
+  return (<>
+    <h1>Todo-applikation</h1>
+    {loading ?
+      <h2>Loading data.. Please wait a moment</h2> 
+      : errorMsg ? <h2 style={{color:"red"}}>{errorMsg}</h2>
+      : <h2>We have data</h2>  }
+  </>)
 }
 
 export default App
