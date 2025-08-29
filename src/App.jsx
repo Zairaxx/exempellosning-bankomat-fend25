@@ -1,19 +1,21 @@
-import { useState } from 'react'
+import {useEffect} from 'react'
 import './App.css'
-import ATM from './components/ATM'
 
 function App() {
 
-  const [show, setShow] = useState(false);
-
-  const toggleATM = () => {
-    setShow(!show);
+  let fetchData = async () => {
+      let response = await fetch("https://jsonplaceholder.typicode.com/todos/1");
+      let json = await response.json();
+      console.log(json);
   }
+
+  useEffect(() => {
+    fetchData();
+  },[])
 
   return (
     <>
-      <button onClick={toggleATM}>Toggle</button>
-      {show && <ATM/>}
+    <h1>API</h1>
     </>
   )
 }
